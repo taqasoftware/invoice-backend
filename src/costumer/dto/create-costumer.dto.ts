@@ -9,7 +9,5 @@ export class CreateCostumerDto {
     @IsNotEmpty()
     phone_number: string;
 
-    @IsNotEmpty()
-    poinst: number;
-
+   
 }

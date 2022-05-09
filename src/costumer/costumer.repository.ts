@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { query } from "express";
 import { DeleteResult, Repository } from "typeorm";
 import { CreateCostumerDto } from "./dto/create-costumer.dto";
 import { UpdateCostumerDto } from "./dto/update-costumer.dto";
@@ -17,24 +18,28 @@ export class CostumerRepository {
     async createCostumer(createCostumerDto: CreateCostumerDto): Promise<Costumer> {
         const { phone_number ,full_name } = createCostumerDto;
         const costumer :Costumer = new Costumer();
-        costumer.phone_number = phone_number;
-        costumer.full_name = full_name;
+        costumer.phone_number = full_name;
+        costumer.full_name = phone_number;
         costumer.points = 0;
+        console.log(costumer)
         try{
           return await this.costumerRepository.save(costumer);
         }catch(error){
+          console.log(error)
           if(error.code === "ER_DUP_ENTRY"){
+            
             throw new BadRequestException("Costumer Already Exist")
           }
         }
+      
     }
 
     async findAll(): Promise<Costumer[]> {
-        return await this.costumerRepository.find();
+        return await this.costumerRepository.query(`SELECT * FROM costumer`);
     }
 
     async findOneCostumer(id: number): Promise<Costumer> {
-        const costumer:Costumer = await this.costumerRepository.findOne({where:{id}});
+        const costumer:Costumer = await this.costumerRepository.query(`SELECT * FROM costumer where id = ${id}`);
         if(!costumer){
             throw new NotFoundException('Costumer not found');
         }
@@ -58,7 +63,13 @@ export class CostumerRepository {
     }
 
     async findByPhoneNumber(phone_number: string): Promise<Costumer> {
-        return await this.costumerRepository.findOne({where:{phone_number}});
-    }
+        const costumer:Costumer[] =  await this.costumerRepository.query(`SELECT * FROM costumer where phone_number = '${phone_number}'`);
+        
+        if(costumer.length === 0){
+        
+        throw new NotFoundException('Costumer not found');
+      }
+      return costumer[0];
+      }
 
 }

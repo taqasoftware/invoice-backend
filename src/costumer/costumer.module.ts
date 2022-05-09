@@ -8,6 +8,7 @@ import { CostumerRepository } from './costumer.repository';
 @Module({
   controllers: [CostumerController],
   providers: [CostumerService,CostumerRepository],
-  imports:[TypeOrmModule.forFeature([Costumer])]
+  imports:[TypeOrmModule.forFeature([Costumer])],
+  exports:[CostumerService]
 })
 export class CostumerModule {}

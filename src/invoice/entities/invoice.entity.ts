@@ -1,12 +1,12 @@
 import { Costumer } from "src/costumer/entities/costumer.entity";
-import { Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 
 
 @Entity()
 export class Invoice {
 
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id:number
 
     @Column()

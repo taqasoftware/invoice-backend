@@ -17,7 +17,7 @@ export class Costumer {
     @Column({type: "int", nullable: false, default: 0})
     points:number;
 
-    @OneToMany(type => Invoice, invoice => invoice.costumer)
+    @OneToMany(type => Invoice, invoice => invoice.costumer,{eager: true,onDelete: "CASCADE"})
     invoices:Invoice[]
 
 
