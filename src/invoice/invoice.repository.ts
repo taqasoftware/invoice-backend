@@ -14,12 +14,14 @@ export class InvoiceRepository {
     private invoice: Repository<Invoice>,
   ) {}
 
-  createInvoice(createInvoiceDto: CreateInvoiceDto, costumerId: number) {
-    const { invoice_number } = createInvoiceDto;
-    const invoice: Invoice = new Invoice();
-    invoice.serial_number = invoice_number;
-    invoice.costumer_id = costumerId;
-    return this.invoice.save(invoice);
+  async createInvoice(createInvoiceDto: CreateInvoiceDto, costumer_id: number) {
+     
+    const result = new Invoice();
+  
+    result.invoice_number = createInvoiceDto.invoice_number.toString();
+    result.costumer_id = 1;
+    return await this.invoice.save(result);
+    
   }
 
   async findAll(): Promise<Invoice[]> {

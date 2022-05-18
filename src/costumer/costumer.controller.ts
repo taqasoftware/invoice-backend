@@ -34,7 +34,7 @@ export class CostumerController {
     return this.costumerService.remove(+id);
   }
 
-  @Get('/phone_number/:phone_number')
+  @Get('/phone-number/:phone_number')
   findByPhoneNumber(@Param('phone_number') phone_number: string): Promise<Costumer> {
     return this.costumerService.findByPhoneNumber(phone_number);
   }

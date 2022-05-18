@@ -10,7 +10,7 @@ export class Invoice {
     id:number
 
     @Column()
-    serial_number:string
+    invoice_number:string
 
     @Column()
     costumer_id:number

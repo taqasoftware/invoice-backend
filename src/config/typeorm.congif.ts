@@ -19,7 +19,8 @@ import {
         subscribers: ['dist/subscribers/**/*{.js,.ts}'],
         migrationsTableName: 'migrations_typeorm',
         migrationsRun: true,
-        synchronize: true
+        synchronize: true,
+        dropSchema:true
       };
     }
   }

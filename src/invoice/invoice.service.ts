@@ -16,16 +16,14 @@ export class InvoiceService {
    private readonly costumerService: CostumerService, 
   ) { }
 
-  async create(createInvoiceDto: CreateInvoiceDto): Promise<Invoice> {
-    const {fullName, phoneNumber} = createInvoiceDto;
-    if(!fullName) {
-      const { phoneNumber } = createInvoiceDto;
-      const costumer = await this.costumerService.findByPhoneNumber(phoneNumber)
+  async   create(createInvoiceDto: CreateInvoiceDto): Promise<Invoice> {
+    const {invoice_number, costumer_id} = createInvoiceDto;
+     
+      
+      const costumer = await this.costumerService.findOne(costumer_id)
+      console.log(createInvoiceDto)
       return await this.invoiceRepository.createInvoice(createInvoiceDto, costumer.id);
-    }
-    const costumer:Costumer= await this.costumerService.create({full_name:fullName,phone_number: phoneNumber});
-    return this.invoiceRepository.createInvoice(createInvoiceDto, costumer.id);
-
+  
   }
 
   findAll(): Promise<Invoice[]> {
