@@ -1,7 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IncomingMessage } from 'http';
-import { Costumer } from 'src/costumer/entities/costumer.entity';
 import {  DeleteResult, EntityManager, Repository } from 'typeorm';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
@@ -17,9 +15,9 @@ export class InvoiceRepository {
   async createInvoice(createInvoiceDto: CreateInvoiceDto, costumer_id: number) {
      
     const result = new Invoice();
-  
     result.invoice_number = createInvoiceDto.invoice_number.toString();
-    result.costumer_id = 1;
+    result.costumer_id = costumer_id;
+    result.price = 1000
     return await this.invoice.save(result);
     
   }

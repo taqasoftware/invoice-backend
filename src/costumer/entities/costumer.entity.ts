@@ -14,9 +14,6 @@ export class Costumer {
     @Column({type: "varchar", length: 20, nullable: false,unique: true})
     phone_number:string
 
-    @Column({type: "int", nullable: false, default: 0})
-    points:number;
-
     @OneToMany(type => Invoice, invoice => invoice.costumer,{eager: true,onDelete: "CASCADE"})
     invoices:Invoice[]
 

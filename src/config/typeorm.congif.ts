@@ -13,14 +13,13 @@ import {
         port: 3306,
         username: 'redwan',
         password: 'redwan1999',
-        database: 'invoice',
+        database: 'vaulture',
         entities: [join(__dirname, '../**/*.entity{.ts,.js}')],
         migrations: ['dist/migrations/*{.ts,.js}'],
         subscribers: ['dist/subscribers/**/*{.js,.ts}'],
         migrationsTableName: 'migrations_typeorm',
         migrationsRun: true,
-        synchronize: true,
-        dropSchema:true
+        synchronize: true
       };
     }
   }

@@ -21,7 +21,7 @@ export class InvoiceService {
      
       
       const costumer = await this.costumerService.findOne(costumer_id)
-      console.log(createInvoiceDto)
+      console.log(costumer)
       return await this.invoiceRepository.createInvoice(createInvoiceDto, costumer.id);
   
   }

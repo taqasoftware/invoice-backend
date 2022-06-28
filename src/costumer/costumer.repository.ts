@@ -20,8 +20,8 @@ export class CostumerRepository {
         const costumer :Costumer = new Costumer();
         costumer.phone_number = phone_number;
         costumer.full_name = full_name;
-        costumer.points = 0;
-        console.log(costumer)
+    
+        
         try{
           return await this.costumerRepository.save(costumer);
         }catch(error){
@@ -40,11 +40,11 @@ export class CostumerRepository {
 
     async findOneCostumer(id: number): Promise<Costumer> {
    
-        const costumer:Costumer = await this.costumerRepository.query(`SELECT * FROM costumer where id = ${id}`);
-        if(!costumer){
+        const costumer = await this.costumerRepository.query(`SELECT * FROM costumer where id = ${id}`);
+        if(costumer.length ===0){
             throw new NotFoundException('Costumer not found');
         }
-        return costumer;
+        return costumer[0];
     }
 
     async updateCostumer(id: number, updateCostumerDto : UpdateCostumerDto): Promise<Costumer> {
@@ -65,7 +65,7 @@ export class CostumerRepository {
 
     async findByPhoneNumber(phone_number: string): Promise<Costumer> {
         const costumer:Costumer[] =  await this.costumerRepository.query(`SELECT * FROM costumer where phone_number = '${phone_number}'`);
-        console.log(costumer);
+ 
         if(costumer.length === 0){
         
         throw new NotFoundException('Costumer not found');

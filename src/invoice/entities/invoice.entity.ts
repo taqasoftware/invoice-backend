@@ -1,5 +1,5 @@
 import { Costumer } from "src/costumer/entities/costumer.entity";
-import { Column, Entity, JoinColumn, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { AfterLoad, Column, Entity, JoinColumn, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 
 
@@ -19,6 +19,18 @@ export class Invoice {
     @JoinColumn({name:'costumer_id'})
     costumer:Costumer[]
 
+    @Column({nullable:true})
+    price:number;
+
+    @Column({default:0})
+    checked:number;
+
+    points:number;
+
+    @AfterLoad()
+    getPoints(){
+        this.points = this.price / 10 
+    }
     
 
 }
