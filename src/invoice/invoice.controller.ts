@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
@@ -25,7 +33,10 @@ export class InvoiceController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInvoiceDto: UpdateInvoiceDto): Promise<Invoice> {
+  update(
+    @Param('id') id: string,
+    @Body() updateInvoiceDto: UpdateInvoiceDto,
+  ): Promise<Invoice> {
     return this.invoiceService.update(+id, updateInvoiceDto);
   }
 
@@ -33,7 +44,4 @@ export class InvoiceController {
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.invoiceService.remove(+id);
   }
-
-  
-  
 }

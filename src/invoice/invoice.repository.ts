@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {  DeleteResult, EntityManager, Repository } from 'typeorm';
+import { DeleteResult, EntityManager, Repository } from 'typeorm';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { Invoice } from './entities/invoice.entity';
@@ -13,13 +13,23 @@ export class InvoiceRepository {
   ) {}
 
   async createInvoice(createInvoiceDto: CreateInvoiceDto, costumer_id: number) {
-     
-    const result = new Invoice();
-    result.invoice_number = createInvoiceDto.invoice_number.toString();
-    result.costumer_id = costumer_id;
-    result.price = 1000
-    return await this.invoice.save(result);
-    
+    const invoice = new Invoice();
+    invoice.invoice_number = createInvoiceDto.invoice_number.toString();
+    invoice.costumer_id = costumer_id;
+    invoice.price = 1000;
+    let newInvoice = await this.invoice.save(invoice);
+    let checked = true;
+    while (checked) {
+      console.log(123);
+      newInvoice = await this.findOne(newInvoice.id);
+      if (newInvoice.checked == 1) {
+        return newInvoice;
+      } else if (newInvoice.checked == 2) {
+        await this.remove(newInvoice.id);
+        throw new NotFoundException('invoice number is not found');
+      }
+      // setTimeout(() => {}, 10000);
+    }
   }
 
   async findAll(): Promise<Invoice[]> {
@@ -27,24 +37,27 @@ export class InvoiceRepository {
   }
 
   async findOne(id: number): Promise<Invoice> {
-    const invoice:Invoice =  await this.invoice.findOne({where:{id}});
-    if(!invoice) {
-        throw new NotFoundException('Invoice not found');
-        }
-        return invoice;
+    const invoice: Invoice = await this.invoice.findOne({ where: { id } });
+    if (!invoice) {
+      throw new NotFoundException('Invoice not found');
+    }
+    return invoice;
   }
 
-    async update(id: number, updateInvoiceDto: UpdateInvoiceDto): Promise<Invoice> {
-   
+  async update(
+    id: number,
+    updateInvoiceDto: UpdateInvoiceDto,
+  ): Promise<Invoice> {
     const invoice: Invoice = await this.findOne(id);
-    const newInvoice :Invoice = Object.assign(invoice, updateInvoiceDto);
+    const newInvoice: Invoice = Object.assign(invoice, updateInvoiceDto);
     return this.invoice.save(newInvoice);
-    
+  }
+
+  async remove(id: number): Promise<DeleteResult> {
+    let deleted = await this.invoice.delete(id);
+    if (deleted.affected === 0) {
+      throw new NotFoundException('Invoice not found');
     }
-
-    async remove(id: number): Promise<DeleteResult> {
-        return this.remove(id);
-    }
-
-
+    return deleted;
+  }
 }
