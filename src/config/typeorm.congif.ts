@@ -10,8 +10,9 @@ export default class TypeOrmConfig {
     return {
       type: 'mysql',
       port: 3306,
-      username: 'root',
-      database: 'discount',
+      username: 'redwan',
+      password:'redwan1999',
+      database: 'vaulture',
       entities: [join(__dirname, '../**/*.entity{.ts,.js}')],
       migrations: ['dist/migrations/*{.ts,.js}'],
       subscribers: ['dist/subscribers/**/*{.js,.ts}'],

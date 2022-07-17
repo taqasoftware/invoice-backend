@@ -22,6 +22,8 @@ export class InvoiceController {
     return this.invoiceService.create(createInvoiceDto);
   }
 
+  
+
   @Get()
   findAll(): Promise<Invoice[]> {
     return this.invoiceService.findAll();

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, EntityManager, Repository } from 'typeorm';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
@@ -12,15 +12,16 @@ export class InvoiceRepository {
     private invoice: Repository<Invoice>,
   ) {}
 
-  async createInvoice(createInvoiceDto: CreateInvoiceDto, costumer_id: number) {
+  async createInvoice(createInvoiceDto: CreateInvoiceDto) {
     const invoice = new Invoice();
+    console.log(createInvoiceDto)
     invoice.invoice_number = createInvoiceDto.invoice_number.toString();
-    invoice.costumer_id = costumer_id;
+    invoice.costumer_id = createInvoiceDto.costumer_id;
     invoice.price = 1000;
     let newInvoice = await this.invoice.save(invoice);
     let checked = true;
     while (checked) {
-      console.log(123);
+     
       newInvoice = await this.findOne(newInvoice.id);
       if (newInvoice.checked == 1) {
         return newInvoice;
@@ -60,4 +61,12 @@ export class InvoiceRepository {
     }
     return deleted;
   }
+
+async checkInvoices(){
+  let count:number = await this.invoice.count({where:{paid:0}});
+  console.log(count)
+  if(count>0)throw new BadRequestException('the last discount did not used');
+  return true;
+
+}
 }

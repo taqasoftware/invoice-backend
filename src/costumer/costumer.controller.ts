@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { CreateInvoiceDto } from 'src/invoice/dto/create-invoice.dto';
 import { DeleteResult } from 'typeorm';
 import { CostumerService } from './costumer.service';
 import { CreateCostumerDto } from './dto/create-costumer.dto';
+import { CreateWithPhoneNumberDto } from './dto/create-with-phoneNumber.dto';
 import { UpdateCostumerDto } from './dto/update-costumer.dto';
 import { Costumer } from './entities/costumer.entity';
 
@@ -34,8 +36,8 @@ export class CostumerController {
     return this.costumerService.remove(+id);
   }
 
-  @Get('/phone-number/:phone_number')
-  findByPhoneNumber(@Param('phone_number') phone_number: string): Promise<Costumer> {
-    return this.costumerService.findByPhoneNumber(phone_number);
+  @Post('/phone-number/')
+  findByPhoneNumber(@Body() createWithPhoneNumberDto: CreateWithPhoneNumberDto): Promise<Costumer> {
+    return this.costumerService.findByPhoneNumber(createWithPhoneNumberDto);
   }
 }

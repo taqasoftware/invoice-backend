@@ -10,5 +10,6 @@ import { CostumerModule } from 'src/costumer/costumer.module';
   controllers: [InvoiceController],
   providers: [InvoiceService,InvoiceRepository],
   imports: [TypeOrmModule.forFeature([Invoice]),CostumerModule],
+  exports: [InvoiceRepository]
 })
 export class InvoiceModule {}

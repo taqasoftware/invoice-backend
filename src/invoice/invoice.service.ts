@@ -19,10 +19,10 @@ export class InvoiceService {
   async   create(createInvoiceDto: CreateInvoiceDto): Promise<Invoice> {
     const {invoice_number, costumer_id} = createInvoiceDto;
      
-      
+      await this.invoiceRepository.checkInvoices()
       const costumer = await this.costumerService.findOne(costumer_id)
-      console.log(costumer)
-      return await this.invoiceRepository.createInvoice(createInvoiceDto, costumer.id);
+    
+      return await this.invoiceRepository.createInvoice(createInvoiceDto);
   
   }
 

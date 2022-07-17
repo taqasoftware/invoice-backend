@@ -1,16 +1,25 @@
 import { Injectable } from '@nestjs/common';
+import { Invoice } from 'src/invoice/entities/invoice.entity';
+import { InvoiceRepository } from 'src/invoice/invoice.repository';
+import { InvoiceService } from 'src/invoice/invoice.service';
 import { DeleteResult } from 'typeorm';
 import { CostumerRepository } from './costumer.repository';
 import { CreateCostumerDto } from './dto/create-costumer.dto';
+import { CreateWithPhoneNumberDto } from './dto/create-with-phoneNumber.dto';
 import { UpdateCostumerDto } from './dto/update-costumer.dto';
 import { Costumer } from './entities/costumer.entity';
 
 @Injectable()
 export class CostumerService {
-  constructor(private readonly costumerRepository: CostumerRepository) {}
+  constructor(private readonly costumerRepository: CostumerRepository,private invoiceService:InvoiceRepository) {}
 
-  create(createCostumerDto: CreateCostumerDto): Promise<Costumer> {
-    return this.costumerRepository.createCostumer(createCostumerDto);
+  async create(createCostumerDto: CreateCostumerDto): Promise<Costumer> {
+    
+    const costumer:Costumer = await this.costumerRepository.createCostumer(createCostumerDto);
+
+    const invoice:Invoice = await this.invoiceService.createInvoice({costumer_id:costumer.id,invoice_number:createCostumerDto.invoice_number});
+
+    return costumer;
   }
 
   findAll(): Promise<Costumer[]> {
@@ -29,8 +38,13 @@ export class CostumerService {
     return this.costumerRepository.deleteCostumer(id);
   }
 
-  async findByPhoneNumber(phone_number: string): Promise<Costumer> {
-    return await this.costumerRepository.findByPhoneNumber(phone_number);
+  async findByPhoneNumber(createWithPhoneNumberDto: CreateWithPhoneNumberDto): Promise<Costumer> {
+    const {invoice_number} = createWithPhoneNumberDto;
+    const costumer:Costumer =  await this.costumerRepository.findByPhoneNumber(createWithPhoneNumberDto.phone_number);
+    console.log(costumer)
+    const invoice:Invoice = await this.invoiceService.createInvoice({costumer_id:costumer.id,invoice_number:invoice_number})
+    return costumer;
   }
 
 }
+ 

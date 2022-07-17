@@ -25,6 +25,10 @@ export class Invoice {
     @Column({default:0})
     checked:number;
 
+    @Column({default:0})
+    paid:number;
+
+
     points:number;
 
     @AfterLoad()

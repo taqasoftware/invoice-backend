@@ -16,10 +16,11 @@ export class CostumerRepository {
 
 
     async createCostumer(createCostumerDto: CreateCostumerDto): Promise<Costumer> {
-        const { phone_number ,full_name } = createCostumerDto;
+        const { phone_number ,full_name ,card_number} = createCostumerDto;
         const costumer :Costumer = new Costumer();
         costumer.phone_number = phone_number;
         costumer.full_name = full_name;
+        costumer.card_number = card_number;
     
         
         try{
@@ -64,8 +65,8 @@ export class CostumerRepository {
     }
 
     async findByPhoneNumber(phone_number: string): Promise<Costumer> {
-        const costumer:Costumer[] =  await this.costumerRepository.query(`SELECT * FROM costumer where phone_number = '${phone_number}'`);
- 
+        const costumer:Costumer[] =  await this.costumerRepository.query(`SELECT * FROM costumer where phone_number = '${phone_number}' or card_number = '${phone_number}'`);
+      console.log(costumer)
         if(costumer.length === 0){
         
         throw new NotFoundException('Costumer not found');
