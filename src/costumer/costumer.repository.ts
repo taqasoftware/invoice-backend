@@ -25,8 +25,7 @@ export class CostumerRepository {
         
         try{
           return await this.costumerRepository.save(costumer);
-        }catch(error){
-          console.log(error)
+        }catch(error){ 
           if(error.code === "ER_DUP_ENTRY"){
             
             throw new BadRequestException("Costumer Already Exist")
@@ -44,7 +43,7 @@ export class CostumerRepository {
         const costumer = await this.costumerRepository.query(`SELECT * FROM costumer where id = ${id}`);
         if(costumer.length ===0){
             throw new NotFoundException('Costumer not found');
-        }
+        } 
         return costumer[0];
     }
 
@@ -66,7 +65,7 @@ export class CostumerRepository {
 
     async findByPhoneNumber(phone_number: string): Promise<Costumer> {
         const costumer:Costumer[] =  await this.costumerRepository.query(`SELECT * FROM costumer where phone_number = '${phone_number}' or card_number = '${phone_number}'`);
-      console.log(costumer)
+ 
         if(costumer.length === 0){
         
         throw new NotFoundException('Costumer not found');

@@ -60,7 +60,7 @@ export class InvoiceRepository {
 
 async checkInvoices(){
   let count:number = await this.invoice.count({where:{paid:0}});
-  console.log(count)
+ 
   if(count>0)throw new BadRequestException('the last discount did not used');
   return true;
 

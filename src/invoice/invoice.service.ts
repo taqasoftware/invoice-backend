@@ -20,7 +20,7 @@ export class InvoiceService {
     const {invoice_number, costumer_id} = createInvoiceDto;
      
       await this.invoiceRepository.checkInvoices()
-      const costumer = await this.costumerService.findOne(costumer_id)
+      const costumer = await this.costumerService.findOne(costumer_id);
     
       return await this.invoiceRepository.createInvoice(createInvoiceDto);
   
