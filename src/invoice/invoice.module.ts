@@ -5,11 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { InvoiceRepository } from './invoice.repository';
 import { Invoice } from './entities/invoice.entity'; 
 import { CostumerModule } from 'src/costumer/costumer.module';
+import { Qb } from './entities/qb-invoice.entity';
 
 @Module({
   controllers: [InvoiceController],
   providers: [InvoiceService,InvoiceRepository],
-  imports: [TypeOrmModule.forFeature([Invoice]),CostumerModule],
+  imports: [TypeOrmModule.forFeature([Invoice,Qb]),CostumerModule],
   exports: [InvoiceRepository]
 })
 export class InvoiceModule {}

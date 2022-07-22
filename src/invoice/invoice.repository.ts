@@ -4,33 +4,29 @@ import { DeleteResult, EntityManager, Repository } from 'typeorm';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { Invoice } from './entities/invoice.entity';
+import { Qb } from './entities/qb-invoice.entity';
 
 @Injectable()
 export class InvoiceRepository {
   constructor(
     @InjectRepository(Invoice)
     private invoice: Repository<Invoice>,
+    @InjectRepository(Qb)
+    private qb :Repository<Qb>
   ) {}
 
   async createInvoice(createInvoiceDto: CreateInvoiceDto) {
     const invoice = new Invoice();
-    console.log(createInvoiceDto)
+    const qbInvoice = await this.qb.findOne({where:{invNo:createInvoiceDto.invoice_number}});
+    if(!qbInvoice){
+      throw new NotFoundException('Invoice Not Found');
+    }
     invoice.invoice_number = createInvoiceDto.invoice_number.toString();
     invoice.costumer_id = createInvoiceDto.costumer_id;
-    invoice.price = 1000;
-    let newInvoice = await this.invoice.save(invoice);
-    let checked = true;
-    while (checked) {
-     
-      newInvoice = await this.findOne(newInvoice.id);
-      if (newInvoice.checked == 1) {
-        return newInvoice;
-      } else if (newInvoice.checked == 2) {
-        await this.remove(newInvoice.id);
-        throw new NotFoundException('invoice number is not found');
-      }
-      // setTimeout(() => {}, 10000);
-    }
+    invoice.price = qbInvoice.invValue;
+    
+    return await this.invoice.save(invoice);
+    
   }
 
   async findAll(): Promise<Invoice[]> {
