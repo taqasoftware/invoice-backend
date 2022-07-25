@@ -17,16 +17,22 @@ export class InvoiceRepository {
 
   async createInvoice(createInvoiceDto: CreateInvoiceDto) {
     const invoice = new Invoice();
-    const qbInvoice = await this.qb.findOne({where:{invNo:createInvoiceDto.invoice_number}});
+    const qbInvoice = await this.qb.findOne({where:{invo:createInvoiceDto.invoice_number}});
     if(!qbInvoice){
       throw new NotFoundException('Invoice Not Found');
     }
     invoice.invoice_number = createInvoiceDto.invoice_number.toString();
     invoice.costumer_id = createInvoiceDto.costumer_id;
-    invoice.price = qbInvoice.invValue;
+    invoice.price = qbInvoice.invvalue;
     
-    return await this.invoice.save(invoice);
-    
+    try{
+      return await this.invoice.save(invoice);
+    }catch(error){ 
+      if(error.code === "ER_DUP_ENTRY"){
+
+        throw new BadRequestException("Invoice Already Exist")
+      }
+    }
   }
 
   async findAll(): Promise<Invoice[]> {

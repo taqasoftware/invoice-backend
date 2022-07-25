@@ -3,17 +3,17 @@ import { AfterLoad, Column, Entity, JoinColumn, OneToMany, PrimaryColumn, Primar
 
 
 
-@Entity('tblQB')
+@Entity('tblqb')
 export class Qb {
 
     @PrimaryGeneratedColumn()
     id:number
 
     @Column()
-    invNo:string
+    invo:string;
 
-    @Column()
-    invValue:number
+    @Column({type:'double'})
+    invvalue:number
     
 
 }

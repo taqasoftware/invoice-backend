@@ -39,8 +39,10 @@ export class CostumerService {
   }
 
   async findByPhoneNumber(createWithPhoneNumberDto: CreateWithPhoneNumberDto): Promise<Costumer> {
+    
     const {invoice_number} = createWithPhoneNumberDto;
     const costumer:Costumer =  await this.costumerRepository.findByPhoneNumber(createWithPhoneNumberDto.phone_number);
+ 
  
     const invoice:Invoice = await this.invoiceService.createInvoice({costumer_id:costumer.id,invoice_number:invoice_number})
     return costumer;

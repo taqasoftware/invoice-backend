@@ -9,7 +9,7 @@ export class Invoice {
     @PrimaryGeneratedColumn()
     id:number
 
-    @Column()
+    @Column({unique:true})
     invoice_number:string
 
     @Column()
@@ -21,9 +21,6 @@ export class Invoice {
 
     @Column({nullable:true})
     price:number;
-
-    @Column({default:0})
-    checked:number;
 
     @Column({default:0})
     paid:number;
